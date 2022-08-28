@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <span class="todo-count">剩余<strong>数量值</strong></span>
+    <span class="todo-count">剩余<strong>数量值</strong> {{ count }}</span>
     <ul class="filters">
       <li v-for="item in lis" :key="item.id">
         <a
@@ -11,7 +11,9 @@
         >
       </li>
     </ul>
-    <button class="clear-completed">清除已完成</button>
+    <button class="clear-completed" @click="$emit('clear-done')">
+      清除已完成
+    </button>
   </footer>
 </template>
 
@@ -37,6 +39,12 @@ export default {
       flag: lis[0].id,
       lis,
     };
+  },
+  computed: {
+    count() {
+      const list = this.$parent.list;
+      return list.reduce((per, curr) => (curr.isDone ? per : ++per), 0);
+    },
   },
 };
 </script>

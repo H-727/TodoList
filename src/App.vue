@@ -1,18 +1,18 @@
 <template>
   <div>
-    <todo-header @add-task="addTask" />
+    <todo-header @add-task="addTask" :list="list" />
     <todo-main :list="list" @del-Todo="delTodo" :changeState="state" />
-    <todo-footer @change-state="changeState" />
+    <todo-footer @change-state="changeState" @clear-done="clearDone" />
   </div>
 </template>
 
 <script>
-import "./styles/base.css";
-import "./styles/index.css";
-import { v4 as uuidv4 } from "uuid";
 import TodoHeader from "@/components/TodoHeader.vue";
 import TodoMain from "@/components/TodoMain.vue";
 import TodoFooter from "@/components/TodoFooter.vue";
+import "./styles/base.css";
+import "./styles/index.css";
+import { v4 as uuidv4 } from "uuid";
 export default {
   components: {
     TodoHeader,
@@ -40,13 +40,19 @@ export default {
       this.state = state;
       console.log(this.state);
     },
+    clearDone() {
+      this.list = this.list.filter((item) => !item.isDone);
+      alert("清除成功");
+    },
+    saveTodo(newList) {
+      window.localStorage.setItem("token", JSON.stringify(newList));
+    },
   },
   watch: {
     list: {
       deep: true,
-      handler() {
-        localStorage.setItem("token", JSON.stringify(this.list));
-      },
+      immediate: true,
+      handler: "saveTodo",
     },
   },
 };

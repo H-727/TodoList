@@ -28,7 +28,7 @@ export default {
         case "已完成":
           return this.list.filter((itme) => itme.isDone);
         default:
-          [];
+          return [];
       }
     },
   },
